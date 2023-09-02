@@ -16,11 +16,13 @@ public class Main {
             int C = Integer.parseInt(br.readLine());
             for (int j = 0; j < changes.length; j++) {
                 int count = C/changes[j];
-                System.out.print(count + " ");
+                bw.write((count) + " ");
                 C = C%changes[j];
             }
-            System.out.println();
+            bw.write("\n");
         }
-
+        br.close();
+        bw.flush();
+        bw.close();
     }
 }
