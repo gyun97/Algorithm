@@ -1,15 +1,13 @@
 N = int(input())
+title = 666
+count_6 = 0
 
-int_title = 666
-titles = []
+while True:
+    if "666" in str(title):
+        count_6 += 1
 
-while len(titles) < N:
-    str_title = str(int_title)
-    for i in range(len(str_title)-2):
-        if str_title[i:i+3] == "666":
-            titles.append(str_title)
-            break
-            
-    int_title += 1
+    if count_6 == N:
+        print(title)
+        break
 
-print(titles[-1])
+    title += 1
