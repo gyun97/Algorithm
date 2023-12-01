@@ -26,19 +26,18 @@ public class Main {
         }
 
         int min_cost = cost[0];
-        int total_cost = 0;
+        long total_cost = 0;
 
         for (int i = 0; i < N - 1; i++) {
             if (cost[i] < min_cost) {
                 min_cost = cost[i];
             }
-            total_cost += min_cost * dist[i];
+            total_cost += (long) min_cost * dist[i];
 
         }
 
         sb.append(total_cost);
         System.out.println(sb);
-
 
     }
 }
