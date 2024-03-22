@@ -1,3 +1,5 @@
+## [dfs]
+
 import sys
 from collections import deque
 sys.setrecursionlimit(10**6) # 백준에서는 재귀 제한을 늘려줘야 런타임 에러가 발생하지 않는다.
@@ -36,3 +38,42 @@ for i in range(1, N + 1):  # 모든 노드를 탐색
 print(count)
 
 
+ 
+## [bfs]
+
+# import sys
+# sys.setrecursionlimit(10**6)
+# from collections import deque
+# 
+# N, M = map(int, sys.stdin.readline().split())
+# 
+# graph = [[] for _ in range(N + 1)]
+# 
+# for _ in range(M):
+#     u, v = map(int, sys.stdin.readline().split())
+#     graph[u].append(v)
+#     graph[v].append(u)
+# 
+# visited = [False] * (N + 1)
+# 
+# count = 0
+# 
+# 
+# def bfs(start):
+#     queue = deque([start])
+#     visited[start] = True
+#     while queue:
+#         node = queue.popleft()
+#         for i in graph[node]:
+#             if not visited[i]:
+#                 visited[i] = True
+#                 queue.append(i)
+# 
+# 
+# for i in range(1, N + 1):
+#     if not visited[i]:
+#         count += 1
+#         bfs(i)
+# 
+# 
+# print(count)
