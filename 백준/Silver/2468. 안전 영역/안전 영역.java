@@ -21,24 +21,19 @@ class Main {
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(br.readLine());
 
         area = new int[N][N];
-
-
         int highest = 0;
 
         for (int i = 0; i < N; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine(), " ");
             for (int j = 0; j < N; j++) {
                 area[i][j] = Integer.parseInt(st.nextToken());
-                highest = Math.max(highest, area[i][j]);
-
-                }
+                highest = Math.max(area[i][j], highest);
             }
-
+        }
 
         int maxCount = 0;
 
@@ -48,36 +43,31 @@ class Main {
             for (int j = 0; j < N; j++) {
                 for (int k = 0; k < N; k++) {
                     if (!visited[j][k] && area[j][k] > height) {
-                        bfs(j, k, height);
+                        dfs(j, k, height);
                         count++;
                     }
-
                 }
             }
-            maxCount = Math.max(count, maxCount);
+            maxCount = Math.max(maxCount, count);
         }
 
         System.out.println(maxCount);
 
-        }
 
-    private static void bfs(int x, int y, int highest) {
-        Queue<Point> queue = new LinkedList<>();
-        queue.add(new Point(x, y));
-        visited[x][y] = true;
-        while (!queue.isEmpty()) {
-            Point currentPoint = queue.poll();
-            for (int i = 0; i < 4; i++) {
-                int nx = currentPoint.x + dx[i];
-                int ny = currentPoint.y + dy[i];
+    }
 
-                if ((nx >= 0 && nx < N) && (ny >= 0 && ny < N)) {
-                    if (!visited[nx][ny] && area[nx][ny] > highest) {
-                        queue.add(new Point(nx, ny));
-                        visited[nx][ny] = true;
-                    }
+    private static void dfs(int x, int y, int height) {
+        Point currentPoint = new Point(x, y);
+        for (int i = 0; i < 4; i++) {
+            int nx = currentPoint.x + dx[i];
+            int ny = currentPoint.y + dy[i];
+            if (0 <= nx && nx < N && 0 <= ny && ny < N) {
+                if (!visited[nx][ny] && area[nx][ny] > height) {
+                    visited[nx][ny] = true;
+                    dfs(nx, ny, height);
                 }
             }
+
         }
     }
 
