@@ -1,20 +1,20 @@
-from collections import deque
-
+# 하향식(top-down)
 A, B = map(int, input().split())
 
-queue = deque([(A, 1)])
+count = 1
 
-while queue:
-    current, count = queue.popleft()
-    if current == B:
-        print(count)
+while B != A:
+    count += 1
+    temp = B
+    if B % 10 == 1:
+        B //= 10
+    elif B % 2 == 0:
+        B //= 2
+    if temp == B:
+        print(-1)
         break
-    elif current > B:
-        continue
-    else:
-        queue.append((current * 2, count + 1))
-        queue.append((current * 10 + 1, count + 1))
 else:
-    print(-1)
+    print(count)
+
 
 
