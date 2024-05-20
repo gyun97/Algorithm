@@ -53,6 +53,7 @@ class Main {
             for (int j = 0; j < m; j++) {
                 if (map[i][j] == 2) {
                     bfs(i, j);
+                    break;
                 }
             }
         }
