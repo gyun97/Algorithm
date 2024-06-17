@@ -1,6 +1,3 @@
-import java.util.*;
-import java.math.*;
-
 class Solution {
     public long solution(int a, int b) {
         
