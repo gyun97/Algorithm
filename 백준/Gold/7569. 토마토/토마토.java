@@ -96,12 +96,15 @@ class Main {
                 int nx = currentPoint.x + dx[i];
                 int ny = currentPoint.y + dy[i];
 
-                if ((0 <= nz && nz < H) && (0 <= nx && nx < N) && (0 <= ny && ny < M) && (tomatoes[nz][nx][ny] == 0)) {
+                if (0 > nz || nz >= H) continue;
+                if (0 > nx || nx >= N) continue;
+                if (0 > ny || ny >= M) continue;
+                if (tomatoes[nz][nx][ny] == 0) {
                     queue.add(new Point3D(nz, nx, ny));
                     tomatoes[nz][nx][ny] = tomatoes[currentPoint.z][currentPoint.x][currentPoint.y] + 1;
                 }
-            }
 
+            }
 
         }
 
