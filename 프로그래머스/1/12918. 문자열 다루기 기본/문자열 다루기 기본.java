@@ -1,18 +1,8 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public boolean solution(String s) {
-
-        char[] charList = s.toCharArray();
-
-        if (charList.length != 4 && charList.length != 6) return false;
-
-        for (char c : charList) {
-            if (!Character.isDigit(c)) return false;
-        }
-        return true;
-
-
-
+        if (s.length() == 4 || s.length() == 6) return s.matches("\\d{4}|\\d{6}");
+        return false;
     }
 }
