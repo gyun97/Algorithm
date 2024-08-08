@@ -3,7 +3,7 @@ import java.util.Map;
 
 class Solution {
     public String[] solution(String[] players, String[] callings) {
-//        String[] answer = {};
+        String[] answer = new String[players.length];
 //        return answer;
 
         Map<String, Integer> ranking = new HashMap<>();
@@ -14,20 +14,17 @@ class Solution {
 
         for (String calling : callings) {
             int currentRanking = ranking.get(calling);
-            int frontRanking = currentRanking - 1;
             String frontPlayer = players[currentRanking - 1];
 
-            ranking.replace(calling, frontRanking);
             ranking.replace(frontPlayer, currentRanking);
-
             players[currentRanking] = frontPlayer;
-            players[frontRanking] = calling;
+
+            ranking.replace(calling, currentRanking - 1);
+            players[currentRanking - 1] = calling;
+
+            
         }
-
         return players;
-
-
-
 
 
 
