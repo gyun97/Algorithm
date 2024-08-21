@@ -5,8 +5,8 @@ class Solution {
         int[] result = new int[size];
 
         for (int index = 0; index < size; index++) {
-            long i = (left + index) / n; // 행
-            long j = (left + index) % n; // 열
+            long i = (left + index) / n ; // 행
+            long j = (left + index) % n ; // 열
             result[index] = (int)(Math.max(i, j) + 1);
         }
 
