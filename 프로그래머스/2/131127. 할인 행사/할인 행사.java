@@ -1,35 +1,26 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 class Solution {
     public int solution(String[] want, int[] number, String[] discount) {
+        int answer = 0;
+        ArrayList<String> list = new ArrayList<>();
 
-        List<String> wantList = new ArrayList<>();
-
-        for (int i = 0; i < want.length; i++) {
-            for (int j = 0; j < number[i]; j++) {
-                wantList.add(want[i]);
+        for (int i=0; i<want.length; i++) {
+            while (number[i]-- > 0) {
+                list.add(want[i]);
             }
         }
 
-        int answer = 0;
-
-        List<String> discountList = Arrays.stream(discount).collect(Collectors.toList());
-
-        Collections.sort(wantList);
-//        wantList.stream().forEach(System.out::println);
-
-        for (int i = 0; i <= discount.length - 10; i++) {
-            List<String> list = new ArrayList<>(discountList.subList(i, i + 10));
-            Collections.sort(list);
-            // list.stream().forEach(System.out::println);
-            // System.out.println();
-            if (list.equals(wantList)) {
-                answer++;
+        for (int i=0; i<discount.length-list.size()+1;i ++) {
+            ArrayList<String> l = (ArrayList<String>) list.clone();
+            for (int j=i; j<i+list.size(); j++) {
+                if (l.contains(discount[j])) {
+                    l.remove(discount[j]);
+                } else {
+                    break;
+                }
             }
+            answer += l.size()==0 ? 1 : 0;
         }
 
         return answer;
