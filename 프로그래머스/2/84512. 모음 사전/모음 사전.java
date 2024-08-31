@@ -27,11 +27,15 @@ class Solution {
             return;
         }
 
-        dfs(word, myWord + "A");
-        dfs(word, myWord + "E");
-        dfs(word, myWord + "I");
-        dfs(word, myWord + "O");
-        dfs(word, myWord + "U");
+        for (String alphabet : alphabets) {
+            dfs(word, myWord + alphabet);
+        }
+
+//        dfs(word, myWord + "A");
+//        dfs(word, myWord + "E");
+//        dfs(word, myWord + "I");
+//        dfs(word, myWord + "O");
+//        dfs(word, myWord + "U");
 
     }
 
@@ -40,4 +44,4 @@ class Solution {
         String word = "AAAAE";
         sol.solution(word);
     }
-}
+}  
