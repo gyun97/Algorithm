@@ -5,7 +5,7 @@ class Solution {
         int result = 0;
         for (int i = 0; i <= t.length() - p.length(); i++) {
             long longT = Long.parseLong(t.substring(i, i + p.length()));
-            System.out.println(longT);
+//            System.out.println(longT);
             if (longT <= longP) {
                 result++;
 
