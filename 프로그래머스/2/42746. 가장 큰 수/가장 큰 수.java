@@ -1,24 +1,28 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 class Solution {
     public String solution(int[] numbers) {
+        String answer = "";
 
-        StringBuilder sb = new StringBuilder();
-
-        String[] stringNums = Arrays.stream(numbers)
-                .mapToObj(String::valueOf)
-                .toArray(String[]::new);
-
-        Arrays.sort(stringNums, (a, b) -> (b + a).compareTo(a + b));
-
-        // 정렬된 문자열을 연결하여 결과를 만듦
-        if (stringNums[0].equals("0")) {
-            return "0";  // 만약 가장 큰 값이 "0"이면, 모든 값이 0이므로 "0"을 반환
+        List<Integer> list = new ArrayList<>();
+        for(int i = 0; i < numbers.length; i++) {
+            list.add(numbers[i]);
         }
-
-        Arrays.stream(stringNums)
-                .forEach(sb::append);
-
-        return sb.toString();
+        Collections.sort(list, (a, b) -> {
+            String as = String.valueOf(a), bs = String.valueOf(b);
+            return -Integer.compare(Integer.parseInt(as + bs), Integer.parseInt(bs + as));
+        });
+        StringBuilder sb = new StringBuilder();
+        for(Integer i : list) {
+            sb.append(i);
+        }
+        answer = sb.toString();
+        if(answer.charAt(0) == '0') {
+            return "0";
+        }else {
+            return answer;
+        }
     }
 }
