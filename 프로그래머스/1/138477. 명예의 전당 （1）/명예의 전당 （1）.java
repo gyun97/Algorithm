@@ -1,28 +1,21 @@
 import java.util.PriorityQueue;
 
-/**
- * K일까지는 발표되는 모든 점수가 명예의 전당에 들고
- * K + 1일부터는 명예의 전당의 최하위 점수는 명예의 전당에서 밀려나고
- * 매일 명예의 전당의 최하위 점수는 answer 배열에 담아 반환해야 된다.
- *
- *
- */
 class Solution {
     public int[] solution(int k, int[] score) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(k); // 우선순위 큐의 초기 용량을 k로 설정
         int[] answer = new int[score.length];
+
         for (int i = 0; i < score.length; i++) {
-            if (i < k) {
-                pq.add(score[i]);
+            pq.add(score[i]); // 새로운 점수를 큐에 추가
+            
+            // k개가 넘는 경우 최소값을 제거
+            if (pq.size() > k) {
+                pq.poll();
             }
             
-            if (i >= k && pq.peek() < score[i]) {
-                pq.poll();
-                pq.add(score[i]);
-            }
-            answer[i] = pq.peek();
-
+            answer[i] = pq.peek(); // 현재 k번째 큰 값을 저장
         }
+
         return answer;
     }
 }
