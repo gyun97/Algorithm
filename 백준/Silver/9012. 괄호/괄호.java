@@ -1,6 +1,7 @@
-import java.io.*;
-import java.util.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
 
 public class Main {
 
@@ -8,45 +9,34 @@ public class Main {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-
         int N = Integer.parseInt(br.readLine());
 
-
-
-        for (int i = 0; i < N; i++) {
-            Stack<Character> stack = new Stack<>();
-            String vps = br.readLine();
-            for (int j = 0; j < vps.length(); j++) {
-                char c = vps.charAt(j);
-                if (c == '(') {
-                    stack.push(c);
-                }
-                else {
-                    int last = vps.length() - 1;
-                    if (!stack.isEmpty() && stack.lastElement() == '(')  {
+        while (N-- > 0) {
+            String[] str = br.readLine().split("");
+            Stack<String> stack = new Stack<>();
+            for (int i = 0; i < str.length; i++) {
+                if (str[i].equals("(")) {
+                    stack.push(str[i]);
+                } else {
+                    if (str[i].equals(")") && stack.contains("(")) {
+//                        stack.remove("(");
                         stack.pop();
+                    } else {
+                        stack.push(str[i]);
                     }
-                    else{
-                        stack.push(c);
-                    }
-
                 }
             }
             if (stack.isEmpty()) {
-                sb.append("YES\n");
+                sb.append("YES").append("\n");
+            } else {
+                sb.append("NO").append("\n");
             }
-            else{
-                sb.append("NO\n");
-            }
-            
+
         }
 
+
         System.out.println(sb);
-        
+
     }
+
 }
-
-
-
-
-
