@@ -28,7 +28,7 @@ public class Main {
         int right = N;
         int answerCount = 0;
 
-        while (right != left) {
+        while (right > left) {
             int sum = array[left] + array[right];
             if (sum < M) {
                 left++;
@@ -37,6 +37,7 @@ public class Main {
             } else if (sum == M) {
                 answerCount++;
                 left++;
+                right--;
             }
         }
         sb.append(answerCount);
