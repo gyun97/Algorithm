@@ -1,14 +1,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
     static int N, M;
-    static List<Integer>[] graph;
+    static ArrayList<Integer>[] graph;
     static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
@@ -27,11 +25,10 @@ public class Main {
             graph[i] = new ArrayList<>();
         }
 
-        for (int i = 0; i < M; i++) {
+        while (M-- > 0) {
             st = new StringTokenizer(br.readLine());
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
-
             graph[u].add(v);
             graph[v].add(u);
         }
@@ -41,27 +38,32 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             if (!visited[i]) {
                 count++;
-                dfs(i);
+                bfs(i);
             }
         }
 
         sb.append(count);
-        System.out.println(count);
-
+        System.out.println(sb);
     }
 
-    private static void dfs(int v) {
-        if (visited[v]) {
-            return;
-        }
-        visited[v] = true;
+    private static void bfs(int v) {
 
-        for (int node : graph[v]) {
-            if (!visited[node]) {
-                dfs(node);
+        Queue<Integer> queue = new ArrayDeque<>();
+
+        visited[v] = true;
+        queue.add(v);
+
+        while (!queue.isEmpty()) {
+            Integer current = queue.poll();
+            for (int node : graph[current]) {
+                if (!visited[node]) {
+                    visited[node] = true;
+                    queue.add(node);
+                }
             }
+            
         }
-        
+
     }
 
 
