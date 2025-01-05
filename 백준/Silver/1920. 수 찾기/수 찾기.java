@@ -1,6 +1,8 @@
-import java.io.*;
-import java.util.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -10,60 +12,47 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         int N = Integer.parseInt(br.readLine());
-        int[] arr_N = new int[N];
-
-
+        int[] A = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         for (int i = 0; i < N; i++) {
-            arr_N[i] = Integer.parseInt(st.nextToken());
-
+            A[i] = Integer.parseInt(st.nextToken());
         }
 
         int M = Integer.parseInt(br.readLine());
-        int[] arr_M = new int[M];
-
-        st = new StringTokenizer(br.readLine(), " ");
-
-        for (int j = 0; j < M; j++) {
-            arr_M[j] = Integer.parseInt(st.nextToken());
+        int[] targets = new int[M];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < M; i++) {
+            targets[i] = Integer.parseInt(st.nextToken());
         }
 
-        Arrays.sort(arr_N);
+        Arrays.sort(A);
 
-        for (int target : arr_M) {
-            int first_idx = 0;
-            int last_idx = N - 1;
-            boolean target_exist = false;
+        Loop:
+        for (int i = 0; i < M; i++) {
+            int target = targets[i];
+            int first = 0;
+            int last = A.length - 1;
 
-            while (last_idx >= first_idx) {
-                int middle_idx = (first_idx + last_idx) / 2;
-
-                if (target == arr_N[middle_idx]) {
+            while (first <= last) {
+                int mid = (first + last) / 2;
+                if (target > A[mid]) {
+                    first = mid + 1;
+                } else if (target < A[mid]) {
+                    last = mid - 1;
+                } else {
                     sb.append(1).append("\n");
-                    target_exist = true;
-                    break;
+                    continue Loop;
                 }
-                else if (target > arr_N[middle_idx]) {
-                    first_idx = middle_idx + 1;
-
-                }
-                else {
-                    last_idx = middle_idx - 1;
-                }
-
             }
 
-            if (!target_exist) {
-                sb.append(0).append("\n");
-            }
+            sb.append(0).append("\n");
+
         }
 
         System.out.println(sb);
 
     }
+
 }
-
-
-
 
 
