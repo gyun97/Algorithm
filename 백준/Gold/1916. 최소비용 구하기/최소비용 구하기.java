@@ -1,96 +1,80 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 class Node implements Comparable<Node> {
     int end;
-    int cost;
+    int weight;
 
-    Node(int end, int cost) {
+    Node(int end, int weight) {
         this.end = end;
-        this.cost = cost;
+        this.weight = weight;
     }
 
     @Override
     public int compareTo(Node o) {
-        return cost - o.cost;
+        return weight - o.weight;
     }
 }
 
-class Main {
+public class Main {
 
-    static int N, M; // N = 도시 개수, M = 버스 개수
-    static ArrayList<ArrayList<Node>> list; // 인접리스트
-    static int[] dist; // 시작점에서 각 지점까지의 최단 거리
-    static boolean[] visited; // 방문 처리 여부
-
+    static int N, M;
+    static List<ArrayList<Node>> graph;
+    static int[] dist;
+    static final int INF = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
 
-        N = Integer.parseInt(br.readLine()); // 도시의 개수
-        M = Integer.parseInt(br.readLine()); // 버스의 개수
+        N = Integer.parseInt(br.readLine()); // 노드(도시)의 개수
+        M = Integer.parseInt(br.readLine()); // 엣지(버스 노선)의 개수
 
-
-        list = new ArrayList<>();
-        dist = new int[N + 1];
-        visited = new boolean[N + 1];
-
-        Arrays.fill(dist, Integer.MAX_VALUE);
-
-        for (int i = 0; i <= N; i++) {
-            list.add(new ArrayList<>());
+        graph = new ArrayList<>();
+        for (int i = 0; i <= N; i++) { // 0부터 N까지 초기화
+            graph.add(new ArrayList<>());
         }
 
-        for (int i = 0; i < M; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        for (int i = 0; i < M; i++) { // M개의 엣지 입력
+            StringTokenizer st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
-            int cost = Integer.parseInt(st.nextToken());
-
-            list.get(start).add(new Node(end, cost));
-
+            int weight = Integer.parseInt(st.nextToken());
+            graph.get(start).add(new Node(end, weight));
         }
 
+        dist = new int[N + 1]; // 최단 거리 배열
+        Arrays.fill(dist, INF);
 
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
         int startPos = Integer.parseInt(st.nextToken());
         int endPos = Integer.parseInt(st.nextToken());
 
         sb.append(dijkstra(startPos, endPos));
         System.out.println(sb);
-
-
     }
 
     private static int dijkstra(int start, int end) {
-        PriorityQueue<Node> priorityQueue = new PriorityQueue<>();
-//        boolean[] visited = new boolean[N + 1];
-        priorityQueue.offer(new Node(start, 0));
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.offer(new Node(start, 0));
         dist[start] = 0;
 
-        while (!priorityQueue.isEmpty()) {
-            Node currentNode = priorityQueue.poll();
-            int current = currentNode.end;
+        while (!pq.isEmpty()) {
+            Node currentNode = pq.poll();
+            int currentPos = currentNode.end;
 
-            if (!visited[current]) {
-                visited[current] = true;
+            if (dist[currentPos] < currentNode.weight) continue; // 이미 처리된 노드는 스킵
 
-                for (Node node : list.get(current)) {
-                    if (!visited[node.end] && dist[node.end] > dist[current] + node.cost) {
-                        dist[node.end] = dist[current] + node.cost;
-                        priorityQueue.add(new Node(node.end, dist[node.end]));
-                    }
+            for (Node node : graph.get(currentPos)) {
+                if (dist[node.end] > dist[currentPos] + node.weight) {
+                    dist[node.end] = dist[currentPos] + node.weight;
+                    pq.offer(new Node(node.end, dist[node.end]));
                 }
             }
         }
-        return dist[end];
+        return dist[end] == INF ? -1 : dist[end]; // 도달 불가 시 -1 반환
     }
-
 }
