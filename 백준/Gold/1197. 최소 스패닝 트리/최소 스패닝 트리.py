@@ -32,7 +32,6 @@ def check_same(a, b):
 def union(a, b):
     a = find(a)
     b = find(b)
-    # if find(a) != find(b):
     if a != b:
         if a < b:
             parent[b] = a
@@ -43,8 +42,8 @@ def union(a, b):
 total_sum = 0
 edge_use = 0
 
-# while pq:
-while edge_use < V - 1 and pq:
+
+while edge_use < V - 1:
     weight, start, end = heapq.heappop(pq)
     if not check_same(start, end):
         total_sum += weight
