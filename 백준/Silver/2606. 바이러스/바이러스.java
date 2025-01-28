@@ -1,61 +1,60 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.*;
 
-class Main {
+public class Main {
 
     static int N, M;
-
+    static List<Integer>[] graph;
     static boolean[] visited;
-    static int[][] graph;
-    static int count = 0;
-
-
-
+    
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
-        N = Integer.parseInt(br.readLine());
-        M = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine()); // 컴퓨터(노드)의 수
+        M = Integer.parseInt(br.readLine()); // 간선의 수
 
-        visited = new boolean[N + 1];
-        graph = new int[N + 1][ N + 1];
+        // 그래프 초기화
+        graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
+        }
 
-        for (int i = 0; i < M; i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        while (M-- > 0) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            graph[a][b] = graph[b][a] = 1;
-
+            graph[a].add(b);
+            graph[b].add(a);
         }
-        System.out.println(bfs(1));
 
+        // 방문 체크 배열 초기화
+        visited = new boolean[N + 1];
 
+        // bfs 실행(bfs로 그래프 탐색해서 1번 노드와 몇 개의 노드가 연결되어 있는지 확인)
+        sb.append(bfs(1));
+        System.out.println(sb);
 
     }
 
-    public static int bfs(int x) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(x);
+    private static int bfs(int x) {
+        int count = 0; // 1번 컴퓨터가 감염시킨 컴퓨터 숫자
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(x);
         visited[x] = true;
         while (!queue.isEmpty()) {
-            x = queue.poll();
-            for (int i = 1; i <= N; i++) {
-                if (graph[x][i] == 1 && !visited[i]) {
-                    queue.add(i);
-                    visited[i] = true;
+            int cur = queue.poll();
+            for (int next : graph[cur]) {
+                if (!visited[next]) {
                     count++;
+                    visited[next] = true;
+                    queue.offer(next);
                 }
             }
         }
         return count;
-          }
 
+    }
 }
