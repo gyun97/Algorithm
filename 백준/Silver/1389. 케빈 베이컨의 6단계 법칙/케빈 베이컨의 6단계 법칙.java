@@ -5,68 +5,60 @@ import java.util.*;
 
 public class Main {
     static int N, M;
-    static List<Integer>[] graph;
+    static long[][] graph;
+    static final int INF = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = Integer.parseInt(st.nextToken()); // 유저(노드)의 수
-        M = Integer.parseInt(st.nextToken()); // 인맥(간선)의 수
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        graph = new ArrayList[N + 1]; // 유저(노드)간의 관계가 저장된 인맥(그래프) - 인접 배열
+        graph = new long[N + 1][N + 1]; // 노드 연결 정보를 나타내는 2차원 인접 행렬
         for (int i = 1; i <= N; i++) {
-            graph[i] = new ArrayList<>();
+            for (int j = 1; j <= N; j++) {
+                if (i == j) graph[i][j] = 0;  // 자기 자신과의 거리는 0
+                else graph[i][j] = INF; // 다른 노드과의 거리는 무한대로 초기화
+            }
         }
 
         while (M-- > 0) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            /*무방향 그래프이기 때문에 양쪽에 모두 저장*/
-            graph[a].add(b);
-            graph[b].add(a);
+            graph[a][b] = graph[b][a] = 1; // 연결되어 있는 인접 노드들끼리는 인접 행렬에 0으로 표시(무방향 그래프이기 때문에 양방향 표시)
+
         }
 
-        int minCount = Integer.MAX_VALUE; // 현재까지의 최소 케빈 베이컨의 수
-        int minIdx = 0; // 현재까지의 최소 케빈 베이컨의 수를 가진 사람
+        long minCount = INF; // 현재의 최소 케빈 베이컨 수
+        int minIdx = 0; // 현재의 최소 유저
 
+        floydWarshall();
+        
         for (int i = 1; i <= N; i++) {
-            // bfs: 해당 유저(노드) i의 케빈 베이컨의 수를 구하기 위한 bfs
-            int count = bfs(i);
+            long count = Arrays.stream(graph[i]).sum();
             if (minCount > count) {
                 minCount = count;
                 minIdx = i;
             }
         }
+
         sb.append(minIdx);
         System.out.println(sb);
 
     }
 
-    private static int bfs(int user) {
-        int count = 0; // 해당 유저(노드)의 현재까지의 케빈 베이컨 수 카운트
-        int[] dist = new int[N + 1]; // 해당 유저에서 각 다른 유저들과의 단계(거리) 수를 저장하는 배열
-        Arrays.fill(dist, -1); // 다른 모든 유저들간의 거리 -1로 초기화(-1이면 해당 유저과의 거리는 아직 계산하지 않은 거고 0이면 유저 본인)
-        Queue<Integer> queue = new ArrayDeque<>(); // bfs 수행을 위한 큐
-
-        queue.offer(user);
-        dist[user] = 0; // 유저 자기 자신과의 거리는 0
-
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            for (int next : graph[cur]) {
-                if (dist[next] == -1) { // 아직 거리를 계산하지 않은 인접 유저라면
-                    dist[next] = dist[cur] + 1;
-                    count += dist[cur];
-                    queue.offer(next);
+    private static void floydWarshall() {
+        for (int k = 1; k <= N; k++) {
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
+//                    if (graph[i][j] > graph[i][k] + graph[k][j]) graph[i][j] = graph[i][k] + graph[k][j];
+                    graph[i][j] = Math.min(graph[i][j], graph[i][k] + graph[k][j]);
                 }
             }
         }
 
-        return count;
     }
-
-
 }
