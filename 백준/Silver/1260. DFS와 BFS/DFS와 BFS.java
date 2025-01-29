@@ -1,75 +1,81 @@
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Main {
 
-    static int N, V, M;
-
-    static int[][] graph;
+    static int N, M, V;
+    static List<Integer>[] graph;
     static boolean[] visited;
-    static StringBuilder sb = new StringBuilder();
-    static Queue<Integer> queue = new LinkedList<>();
+    static List<Integer> result;
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-         N = Integer.parseInt(st.nextToken());  // 정점 수
-         M = Integer.parseInt(st.nextToken());  // 간선 수
-         V = Integer.parseInt(st.nextToken());  // 시작 노드 번호
+        N = Integer.parseInt(st.nextToken());  // 정점의 개수
+        M = Integer.parseInt(st.nextToken()); // 간선의 개수
+        V = Integer.parseInt(st.nextToken()); // 탐색을 시작할 정점의 개수
 
-        graph = new int[N + 1][N + 1];
-        visited = new boolean[N + 1];
-
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            int x = Integer.parseInt(st.nextToken());
-            int y = Integer.parseInt(st.nextToken());
-            graph[x][y] = graph[y][x] = 1;
+        // 인접 리스트 그래프 초기화
+        graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
         }
 
+        while (M-- > 0) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            graph[a].add(b);
+            graph[b].add(a);
+        }
 
+        visited = new boolean[N + 1]; // 노드 방문 여부 배열 초기화
+        result = new ArrayList<>(); // 방문 노드 담을 결과 리스트 초기화
 
-        dfs(V);
+        dfs(V).forEach(element -> sb.append(element).append(" ")); // dfs 실행
         sb.append("\n");
-        visited = new boolean[N + 1];
-        bfs(V);
+        bfs(V).forEach(element -> sb.append(element).append(" ")); // bfs 실행
         System.out.println(sb);
+
     }
 
-    public static void dfs(int V) {
-        visited[V] = true;
-        sb.append(V).append(" ");
-
-        for (int i = 1; i < N+1; i++) {
-            if (graph[V][i] == 1 && !visited[i]) {
-                dfs(i);
+    private static List<Integer> dfs(int x) {
+        result.add(x);
+        visited[x] = true;
+        Collections.sort(graph[x]);
+        for (int next : graph[x]) {
+            if (!visited[next]) {
+                dfs(next);
             }
         }
+        return result;
     }
 
-    public static void bfs(int V) {
-        queue.add(V);
-        visited[V] = true;
+    private static List<Integer> bfs(int start) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        List<Integer> result = new ArrayList<>();
+        visited = new boolean[N + 1];
+        result.add(start);
+        queue.offer(start);
+        visited[start] = true;
         while (!queue.isEmpty()) {
-            V = queue.poll();
-            sb.append(V).append(" ");
-            for (int i = 1; i <= N; i++) {
-                if ( graph[V][i] == 1 && !visited[i]) {
-                    queue.add(i);
-                    visited[i] = true;
+            int cur = queue.poll();
+            Collections.sort(graph[cur]);
+            for (int next : graph[cur]) {
+                if (!visited[next]) {
+                    result.add(next);
+                    visited[next] = true;
+                    queue.offer(next);
                 }
+
             }
+
         }
-
+        return result;
     }
-
-
 }
