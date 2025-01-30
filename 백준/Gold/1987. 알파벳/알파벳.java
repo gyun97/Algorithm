@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         R = Integer.parseInt(st.nextToken());
@@ -25,7 +26,8 @@ public class Main {
 
         maxDepth = 0;
         dfs(0, 0, 1);
-        System.out.println(maxDepth);
+        sb.append(maxDepth);
+        System.out.println(sb);
     }
 
     private static void dfs(int x, int y, int depth) {
