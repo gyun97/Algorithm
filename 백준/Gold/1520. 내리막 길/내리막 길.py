@@ -1,34 +1,37 @@
 import sys
+import heapq
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
 
-N, M = map(int, input().split())
-arr = [list(map(int, input().split())) for _ in range(N)]
-dp = [[-1] * M for _ in range(N)]
+M, N = map(int, input().split())
 
-# print(arr)
-# print(dp)
+graph = []
+for _ in range(M):
+    graph.append(list((map(int, input().split()))))
+# print(graph)
 
-
-def dfs(x, y):
-    if x == N - 1 and y == M - 1:  # 만약 목표 지점에 도달했다면
-        return 1  # 목표 지점 직전의 칸의 경로의 개수는 1
-
-    if dp[x][y] != -1:  # 이미 방문한 칸이어서 -1이 아니라면
-        return dp[x][y]  # 해당 칸의 경로의 개수 바로 반환
-
-    dp[x][y] = 0  # 처음 방문하는 칸 방문 표시
-
-    dx = [-1, 1, 0, 0]  # 상,하 1칸씩 이동
-    dy = [0, 0, -1, 1]  # 좌,우 1칸씩 이동
-    for i in range(4):
-        nx = x + dx[i]  
-        ny = y + dy[i]
-        if 0 <= nx < N and 0 <= ny < M:
-            if arr[x][y] > arr[nx][ny]:
-                dp[x][y] += dfs(nx, ny)
-
-    return dp[x][y]
+visited = [[0] * N for _ in range(M)]
 
 
-print(dfs(0, 0))
+def bfs(x, y):
+    pq = []
+    heapq.heappush(pq, (-graph[x][y], x, y))
+    visited[x][y] = 1
+    dx = [-1, 1, 0, 0]
+    dy = [0, 0, -1, 1]
+    while pq:
+        cur = heapq.heappop(pq)
+        cur_val = cur[0]
+        cur_x = cur[1]
+        cur_y = cur[2]
+        for i in range(4):
+            nx = cur_x + dx[i]
+            ny = cur_y + dy[i]
+            if 0 <= nx < M and 0 <= ny < N and cur_val < -graph[nx][ny]:
+                if visited[nx][ny] == 0:
+                    heapq.heappush(pq, (-graph[nx][ny], nx, ny))
+                visited[nx][ny] += visited[cur_x][cur_y]
+
+
+bfs(0, 0)
+# print(visited)
+print(visited[M - 1][N - 1])
