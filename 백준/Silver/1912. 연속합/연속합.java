@@ -3,12 +3,16 @@ import java.util.Scanner;
 
 public class Main {
 
+    static int N, max;
+    static int[] A;
+    static int[] dp;
+
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
+        N = sc.nextInt();
 
-        int[] A = new int[N];
-        int[] dp = new int[N];
+        A = new int[N];
+        dp = new int[N];
         for (int i = 0; i < N; i++) {
             A[i] = sc.nextInt();
         }
@@ -16,7 +20,7 @@ public class Main {
 //        System.out.println(Arrays.toString(A));
 
         dp[0] = A[0];
-        int max = dp[0];
+        max = dp[0];
 
         for (int i = 1; i < N; i++) {
             dp[i] = Math.max(dp[i - 1] + A[i], A[i]);
@@ -24,8 +28,18 @@ public class Main {
         }
 
 //        System.out.println(Arrays.toString(dp));
+        recur(N - 1);
         System.out.println(max);
         
+    }
 
+    private static int recur(int idx) {
+
+        if (dp[idx] == 0) {
+            dp[idx] = Math.max(recur(idx - 1) + A[idx], A[idx]);
+            max = Math.max(dp[idx], max);
+        }
+
+        return dp[idx];
     }
 }
