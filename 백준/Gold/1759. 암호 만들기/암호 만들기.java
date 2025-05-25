@@ -23,37 +23,37 @@ public class Main {
         Arrays.sort(A);
 //        System.out.println(Arrays.toString(A));
 
-        String result = "";
+        secret(0, 0, "", 0, 0);
 
-        secret(0, 0, result, 0, 0);
 
     }
 
-    private static boolean isVowel(String s) {
-        return "aeiou".contains(s);
+    private static boolean isVowel(char c) {
+        return "aeiou".indexOf(c) != -1;
     }
 
     /**
      * 
-     * @param depth 문자열 길이
-     * @param idx 
-     * @param result 문자열
-     * @param vCount 모음 개수
-     * @param cCount 자음 개수
+     * @param length 문자열 길이
+     * @param idx 시작 인덱스
+     * @param result 현재 문자열
+     * @param vowelCount 현재 모음 개수
+     * @param consonantCount 현재 자음 개수
      */
-    private static void secret(int depth, int idx, String result, int vCount, int cCount) {
-        if (depth == L) {
-            if (vCount >= 1 && cCount >= 2) {
+    private static void secret(int length, int idx, String result, int vowelCount, int consonantCount) {
+
+        if (length == L) {
+            if (vowelCount >= 1 && consonantCount >= 2) {
                 System.out.println(result);
             }
             return;
         }
 
-        for (int i = idx; i < C; i++) {
-            if (isVowel(A[i])) {
-                secret(depth + 1, i + 1, result + A[i], vCount + 1, cCount);
+        for (int i = idx; i < A.length; i++) {
+            if (isVowel(A[i].charAt(0))) {
+                secret(length + 1, i + 1, result + A[i], vowelCount + 1, consonantCount);
             } else {
-                secret(depth + 1, i + 1, result + A[i], vCount, cCount + 1);
+                secret(length + 1, i + 1, result + A[i], vowelCount , consonantCount + 1);
             }
 
         }
@@ -61,6 +61,9 @@ public class Main {
 
     }
 
+
 }
+
+
 
 
