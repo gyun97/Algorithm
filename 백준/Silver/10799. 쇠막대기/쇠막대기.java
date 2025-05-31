@@ -1,49 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.io.*;
+import java.util.Stack;
 
 public class Main {
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+        String input = br.readLine();
 
-        Deque<String> stack = new ArrayDeque<>();
+        Stack<Character> stack = new Stack<>();
+        int result = 0;
 
-        String[] sticks = br.readLine().split("");
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
 
-        int answer = 0;
-        boolean flag = false;
+            if (c == '(') {
+                stack.push(c);
+            } else { // c == ')'
+                stack.pop(); // 일단 '(' 제거
 
-        for (int i = 0; i < sticks.length; i++) {
-
-            String s = sticks[i];
-
-            if (sticks[i].equals("(")) {
-                flag = false;
-                stack.push("(");
-                answer++;
-
-            } else {
-                // 레이저인 경우
-                if (flag == false) {
-                    flag = true;
-                    stack.pop();
-                    answer--;
-                    answer += stack.size();
+                if (input.charAt(i - 1) == '(') {
+                    // 레이저: 바로 앞이 '('인 경우
+                    result += stack.size(); // 현재 열린 막대기 수만큼 잘림
                 } else {
-                    stack.pop();
+                    // 쇠막대기 끝
+                    result += 1; // 끝나는 막대기 1조각 추가
                 }
-
-
             }
         }
 
-        System.out.println(answer);
-
-
-
+        System.out.println(result);
     }
 }
