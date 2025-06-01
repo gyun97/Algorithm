@@ -1,44 +1,37 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+
 
 public class Main {
-
-    static int max = -1;
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
-        int T = Integer.parseInt(br.readLine());
-        while (T-- > 0) {
+        int tc = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < tc; i++) {
             int n = Integer.parseInt(br.readLine());
-            int[][] stickers = new int[2][n];
 
-            for (int i = 0; i < 2; i++) {
-                StringTokenizer st = new StringTokenizer(br.readLine());
-                for (int j = 0; j < n; j++) {
-                    stickers[i][j] = Integer.parseInt(st.nextToken());
+            // initialize
+            int[][] stickers = new int[2][n+1];
+            int[][] dp = new int[2][n+1];
+            for(int j=0; j<2; j++){
+                String[] inputs = br.readLine().split(" ");
+                for (int k = 1; k <= n; k++) {
+                    stickers[j][k] = Integer.parseInt(inputs[k-1]);
                 }
             }
 
-            int[][] dp = new int[2][n + 2];
+	    // 첫번째 column은 자기 자신이 최대이므로 자기 자신으로 초기화
+            dp[0][1] = stickers[0][1];
+            dp[1][1] = stickers[1][1];
 
-
-            for (int i = 2; i < n + 2; i++) {
-                dp[0][i] = Math.max(Math.max(dp[1][i - 1], dp[1][i - 2]), dp[0][i - 2]) + stickers[0][i - 2];
-                dp[1][i] = Math.max(Math.max(dp[1][i - 2], dp[0][i - 2]), dp[0][i - 1]) + stickers[1][i - 2];
+            for (int j = 2; j <= n; j++) {
+                dp[0][j] = Math.max(dp[1][j - 1], dp[1][j - 2]) + stickers[0][j];
+                dp[1][j] = Math.max(dp[0][j - 1], dp[0][j - 2]) + stickers[1][j];
             }
-            int max = Math.max(dp[0][n + 1], dp[1][n + 1]);
-            sb.append(max).append("\n");
 
-
-//            System.out.println(Arrays.deepToString(dp));
-
+            System.out.println(Math.max(dp[0][n], dp[1][n]));
         }
-        System.out.println(sb);
-
     }
-
 }
