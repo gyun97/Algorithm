@@ -18,12 +18,11 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             int cur = Integer.parseInt(st.nextToken());
             card[i] = cur;
-            dp[i] = cur;
         }
 
         for (int i = 1; i <= N; i++) {
             for (int j = i; j >= 1; j--) {
-                dp[i] = Math.max(dp[i], dp[i - j] + dp[j]);
+                dp[i] = Math.max(dp[i], dp[i - j] + card[j]);
             }
 
         }
