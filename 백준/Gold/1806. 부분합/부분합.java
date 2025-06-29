@@ -19,22 +19,16 @@ public class Main {
         }
 
         int start = 0, end = 0, sum = 0;
-
         int minLen = Integer.MAX_VALUE;
 
         while (end != N) {
-            sum += A[end];
-            end++;
+            sum += A[end++];
             while (sum >= S) {
                 minLen = Math.min(minLen, end - start);
-                sum -= A[start];
-                start++;
+                sum -= A[start++];
             }
         }
 
-//        System.out.println(Arrays.toString(sum));
-        if (minLen == Integer.MAX_VALUE) minLen = 0;
-        System.out.println(minLen);
-
+        System.out.println(minLen == Integer.MAX_VALUE ? 0 : minLen);
     }
 }
