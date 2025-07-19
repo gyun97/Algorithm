@@ -1,31 +1,59 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int[][] lines = new int[N][2];
+
+    static int N;
+    static int[][] lines;
+    static int[] dp;
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        lines = new int[N][2];
 
         for (int i = 0; i < N; i++) {
-            lines[i][0] = sc.nextInt(); // A
-            lines[i][1] = sc.nextInt(); // B
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            lines[i][0] = Integer.parseInt(st.nextToken());
+            lines[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        // A 기준 정렬
-        Arrays.sort(lines, Comparator.comparingInt(a -> a[0]));
+        int max = 0;
+        dp = new int[N];
 
-        // B 값만 뽑아서 LIS
-        int[] dp = new int[N];
-        int length = 0;
+        Arrays.sort(lines, Comparator.comparingInt((int[] a) -> a[0])); // A 기준으로 정렬
 
         for (int i = 0; i < N; i++) {
-            int b = lines[i][1];
-            int idx = Arrays.binarySearch(dp, 0, length, b);
-            if (idx < 0) idx = -(idx + 1);
-            dp[idx] = b;
-            if (idx == length) length++;
+            max = Math.max(max, recur(i));
         }
 
-        System.out.println(N - length);
+        System.out.println(N - max);
+
+
     }
+
+    private static int recur(int N) {
+        if (dp[N] == 0) {
+            dp[N] = 1;
+
+            for (int i = N + 1; i < lines.length; i++) {
+                if (lines[N][1] < lines[i][1]) {
+                    dp[N] = Math.max(dp[N], recur(i) + 1);
+                }
+
+            }
+
+
+
+        }
+        return dp[N];
+
+    }
+
 }
+
