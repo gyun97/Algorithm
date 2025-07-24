@@ -6,8 +6,10 @@ import java.util.StringTokenizer;
 
 public class Main {
 
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
         int N = Integer.parseInt(br.readLine());
         int[] solutions = new int[N];
@@ -20,30 +22,39 @@ public class Main {
         Arrays.sort(solutions);
 
         int val1 = 0, val2 = 0, val3 = 0;
-        long minAbs = Long.MAX_VALUE;
+        long result = Long.MAX_VALUE;
 
-        for (int i = 0; i < N - 2; i++) {
-            int left = i + 1;
-            int right = N - 1;
-
-            while (left < right) {
-                long sum = (long)solutions[i] + solutions[left] + solutions[right];
-
-                if (Math.abs(sum) < minAbs) {
-                    minAbs = Math.abs(sum);
-                    val1 = solutions[i];
-                    val2 = solutions[left];
-                    val3 = solutions[right];
+        for (int cur = 0; cur < N - 2; cur++) {
+            int start = cur + 1;
+            int end = N - 1;
+            while (start < end) {
+                long newResult = (long)solutions[cur] + solutions[start] + solutions[end];
+                if (result > Math.abs(newResult)) {
+                    result = Math.abs(newResult);
+                    val1 = solutions[cur];
+                    val2 = solutions[start];
+                    val3 = solutions[end];
                 }
 
-                if (sum < 0) left++;
-                else right--;
+                if (newResult < 0) {
+                    start++;
+                } else {
+                    end--;
+                }
+
             }
+
         }
 
-        int[] answer = {val1, val2, val3};
-        Arrays.sort(answer);
+        int[] results = new int[3];
+        results[0] = val1;
+        results[1] = val2;
+        results[2] = val3;
+        Arrays.sort(results);
 
-        System.out.println(answer[0] + " " + answer[1] + " " + answer[2]);
+        System.out.println(results[0] + " " + results[1] + " " + results[2]);
     }
+
+
 }
+
