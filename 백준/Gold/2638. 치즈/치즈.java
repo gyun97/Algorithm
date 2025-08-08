@@ -65,7 +65,13 @@ public class Main {
 
     // 녹일 수 있는 치즈 녹이는 함수
     private static void meltCheese(boolean[][] visited) {
-        List<int[]> meltCheesesList = new ArrayList<>();
+//        List<int[]> meltCheesesList = new ArrayList<>();
+
+        int[][] temp = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            temp[i] = paper[i].clone();
+        }
 
         for (int x = 0; x < N; x++) {
             for (int y = 0; y < M; y++) {
@@ -78,14 +84,16 @@ public class Main {
                         if (visited[nx][ny]) airCount++;
                     }
 
-                    if (airCount >= 2) meltCheesesList.add(new int[]{x, y});
+                    if (airCount >= 2) temp[x][y] = 0;
+//                    if (airCount >= 2) meltCheesesList.add(new int[]{x, y});
                 }
             }
         }
 
-        for (int[] pos : meltCheesesList) {
-            paper[pos[0]][pos[1]] = 0;
-        }
+        paper = temp;
+//        for (int[] pos : meltCheesesList) {
+//            paper[pos[0]][pos[1]] = 0;
+//        }
     }
 
     // 치즈가 모두 녹았는지 확인하는 메서드
