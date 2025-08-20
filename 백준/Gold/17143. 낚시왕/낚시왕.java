@@ -74,11 +74,11 @@ public class Main {
                     int sharkDir = curShark.d;
                     int nr = r, nc = c;
 
-//                    if (sharkDir == 0 || sharkDir == 1) { // 위, 아래
-//                        sharkSpeed %= (R - 1) * 2;
-//                    } else { // 오른쪽, 왼쪽
-//                        sharkSpeed %= (C - 1) * 2;
-//                    }
+                    if (sharkDir == 0 || sharkDir == 1) { // 위, 아래
+                        sharkSpeed %= (R - 1) * 2;
+                    } else { // 오른쪽, 왼쪽
+                        sharkSpeed %= (C - 1) * 2;
+                    }
 
                     for (int i = 0; i < sharkSpeed; i++) {
 
