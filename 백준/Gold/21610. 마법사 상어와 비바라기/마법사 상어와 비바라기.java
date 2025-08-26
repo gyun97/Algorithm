@@ -133,31 +133,11 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
                 if (cloud[i][j]) {
-                    int nx = i; // 행
-                    int ny = j; // 열
-                    for (int k = 0; k < s; k++) {
-                        nx += dx[d]; // 다음 행
-                        ny += dy[d]; // 다음 열
-
-                        // 윗 방향으로 경계 초과할 시
-                        if (0 >= nx) {
-                            nx = N;
-                        }
-                        // 아랫 방향으로 경계 초과할 시
-                        if (nx > N) {
-                            nx = 1;
-                        }
-                        // 왼쪽 방향으로 경계 초과할 시
-                        if (0 >= ny) {
-                            ny = N;
-                        }
-                        // 오른쪽 방향으로 경계 초과할 시
-                        if (ny > N) {
-                            ny = 1;
-                        }
-
-                    }
-
+                    int nx = (i + dx[d] * s) % N;
+                    int ny = (j + dy[d] * s) % N;
+                    if (nx <= 0) nx += N;
+                    if (ny <= 0) ny += N;
+                    
                     tempCloud[nx][ny] = true;
 
                 }
