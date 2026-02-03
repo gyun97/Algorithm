@@ -1,60 +1,69 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
-/**
- * 경우 1. 다리에 아무것도 없는 경우 -> 맨 앞 트럭을 다리에 올리고 시간을 + 1 추가하고 트럭 무게를 다리에 추가
- * <p>
- * 경우 2. 다리 위에 트럭이 있지만 꽉 차지는 않은 경우
- * 2 - 1. 무게 합이 기준보다 낮아 다음 트럭을 올리는 있는 경우 -> 다음 트럭을 다리에 올려 시간 +1, 무게 합 +
- * 2 - 2. 무게 합이 기준보다 높아 다음 트럭을 못 올리는 경우 -> 다리에 0을 추가하여 다리 위 트럭을 앞으로 보내고 시간 + 1
- * <p>
- * 경우 3. 다리가 꽉 찬 경우 -> 가장 앞에 있는 트럭을 다리 밖으로 꺼낸다. 시간 추가는 X
- */
+class Truck {
+    int weight;
+    int pos;
+    
+    public Truck(int weight) {
+        this.weight = weight;
+        this.pos = 1;
+    }
+    
+    public void moving() {
+        pos++;
+    }
+    
+}
 
 class Solution {
     public int solution(int bridge_length, int weight, int[] truck_weights) {
-
-        Queue<Integer> bridge = new LinkedList<>();
-        int weight_sum = 0;
-        int time = 0;
-
-        for (int i = 0; i < truck_weights.length; i++) {
-            int truck = truck_weights[i];
-
-            while (true) {
-                if (bridge.isEmpty()) { // 다리가 비어 있는 경우
-                    bridge.add(truck);
-                    weight_sum += truck;
-                    time++;
-
-                    break;
-                } else if (bridge.size() != bridge_length) { // 다리가 비어있지는 않지만 꽉 차지는 않은 경우
-                    if (weight_sum + truck <= weight) {
-                        bridge.add(truck);
-                        weight_sum += truck;
-                        time++;
-                        break;
-                    } else {
-                        bridge.add(0);
-                        time++;
-                    }
-                } else { // 다리가 꽉 차있는 경우
-                    weight_sum -= bridge.poll();
-                }
-            }
-            // System.out.println("다리 상태: " + bridge);
-
-
+        
+        Queue<Truck> bridge = new LinkedList<>(); // 다리
+        Queue<Truck> wait = new LinkedList<>(); // 트럭대기열
+        
+        for (int w : truck_weights) {
+            wait.offer(new Truck(w));
         }
-        return time + bridge_length;
+        
+        int time = 0; // 최소 경과 시간(정답)
+        int curW = 0; // 현재 다리 위의 트럭 무게 총합
+        
+        // 다리와 대기열에 트럭 전부 없애질 때까지(모든 트럭이 다리를 건널 때까지) 반복
+        while (!bridge.isEmpty() || !wait.isEmpty()) {
+            
+            time++; // 1초 추가 경과
+            
+            // 만약 아직 다리에 트럭이 없다면
+            if (bridge.isEmpty()) {
+                Truck curT = wait.poll();
+                bridge.offer(curT);
+                curW += curT.weight;
+                continue;
+            }
+            
+            // 다리 위 모든 트럭들 한칸씩 전진
+            for (Truck t : bridge) t.moving();
+            
+            // 만약 가장 앞에 있는 트럭이 다리를 지났다면
+            if (bridge.peek().pos > bridge_length) {
+                Truck firstTruck = bridge.poll(); 
+                curW -= firstTruck.weight;
+            }
+            
 
-    }
-
-    public static void main(String[] args) {
-        Solution sol = new Solution();
-        int bridge_length = 2;
-        int weight = 10;
-        int[] truck_weights = {7, 4, 5, 6};
-        // System.out.println(sol.solution(bridge_length, weight, truck_weights));
+            // 대기열 트럭이 남아있고 무게 초과되지 않아 대기열의 트럭을 다리에 올릴 수 있다면
+            if (!wait.isEmpty() && curW + wait.peek().weight <= weight) {
+                Truck curT = wait.poll();
+                bridge.offer(curT);
+                curW += curT.weight;
+            }
+            
+        }
+        
+        return time;
+        
+        
+        
+        
     }
 }
